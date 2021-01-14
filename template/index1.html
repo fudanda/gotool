@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title Page</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/theme-chalk/index.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="app">
+        <el-form v-loading="loading" ref="form" :rules="rules" :model="form" label-width="80px">
+            <el-form-item label="项目路径" prop="path">
+                <el-input v-model="form.path"></el-input>
+            </el-form-item>
+            <el-form-item label="项目名称" prop="name">
+                <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="word页数" prop="page">
+                <el-input type="number" v-model="form.page"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submitForm('form')">立即创建</el-button>
+                <el-button>取消</el-button>
+            </el-form-item>
+        </el-form>
+
+        <template>
+            <el-table :data="tableData" height="250" border style="width: 100%">
+                <el-table-column prop="date" label="日期" width="180">
+                </el-table-column>
+                <el-table-column prop="name" label="姓名" width="180">
+                </el-table-column>
+                <el-table-column prop="address" label="地址">
+                </el-table-column>
+            </el-table>
+        </template>
+
+    </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/index.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            loading: true,
+            form: {
+                name: '课堂',
+                path: 'E:\\phpEnv\\www\\course-tencent-cloud',
+                page: 80,
+            },
+            tableData: [{
+                date: '2016-05-03',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-02',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-04',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-01',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-08',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-06',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-07',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }],
+            rules: {
+                path: [{
+                    required: true,
+                    message: '请输入项目路径',
+                    trigger: 'blur'
+                }],
+                name: [{
+                    required: true,
+                    message: '请输入项目名称',
+                    trigger: 'blur'
+                }],
+                page: [{
+                    required: true,
+                    message: '请输入word页数',
+                    trigger: 'blur'
+                }],
+            },
+        },
+        mounted: function () {
+            this.loading = false
+        },
+        methods: {
+
+
+
+            submitForm(formName) {
+                var that = this;
+                that.loading = true
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+
+                        axios.post('/word', this.form)
+                            .then(function (response) {
+                                console.log(response);
+                                that.loading = false
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                                that.loading = false
+                            });
+
+                    } else {
+                        console.log('error submit!!');
+                        that.loading = false
+                        return false;
+                    }
+
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+
+        }
+    })
+</script>
+
+</html>

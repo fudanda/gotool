@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ant-design-vue@2.0.0-rc.8/dist/antd.min.css">
+
+</head>
+
+<body>
+    <div id="app">
+
+        <a-spin :spinning="spinning">
+            <a-form ref="ruleForm" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+                <a-form-item ref="path" label="项目路径" name="path">
+                    <a-input v-model:value="form.path" />
+                </a-form-item>
+                <a-form-item ref="name" label="项目名称" name="name">
+                    <a-input v-model:value="form.name" />
+                </a-form-item>
+                <a-form-item ref="page" label="word页数" name="page">
+                    <a-input v-model:value="form.page" />
+                </a-form-item>
+                <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+                    <a-button type="primary" @click="onSubmit">
+                        提交
+                    </a-button>
+                </a-form-item>
+            </a-form>
+        </a-spin>
+
+        <a-table :columns="columns" :pagination="false" :data-source="data" :row-key="(record,index)=>{return index}">
+            <template #operation="{ text, record, index }">
+                <a-button type="primary" @click="onDownload(record)">
+                    下载
+                </a-button>
+                <a-popconfirm title="确认删除？" ok-text="确认" cancel-text="取消" @confirm="onDelete(record)">
+                    <a-button type="danger">
+                        删除
+                    </a-button>
+                </a-popconfirm>
+            </template>
+        </a-table>
+
+    </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@3.0.5/dist/vue.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ant-design-vue@2.0.0-rc.8/dist/antd.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/@ant-design/icons-vue@5.1.9/dist/index.umd.min.js"></script> -->
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
+
+<script>
+    const columns = [{
+            title: '文件名称',
+            dataIndex: 'name',
+            key: 'name'
+        },
+        {
+            title: '操作',
+            dataIndex: 'operation',
+            key: 'operation',
+            width: '20%',
+            slots: {
+                customRender: 'operation'
+            }
+        },
+    ];
+
+    const AppInit = {
+        data() {
+            return {
+                data: [],
+                columns,
+                labelCol: {
+                    span: 4
+                },
+                wrapperCol: {
+                    span: 14
+                },
+                form: {
+                    name: '课堂',
+                    path: 'E:\\phpEnv\\www\\course-tencent-cloud',
+                    page: 80,
+                },
+                rules: {
+                    name: [{
+                        required: true,
+                        message: '必填',
+                        trigger: 'blur'
+                    }],
+                    page: [{
+                        required: true,
+                        message: '必填',
+                        trigger: 'blur',
+                        type: 'number'
+                    }],
+                    path: [{
+                        required: true,
+                        message: '必填',
+                        trigger: 'blur',
+                    }],
+                },
+                spinning: false,
+            };
+        },
+        mounted: function () {
+            this.getFiles();
+        },
+        methods: {
+            onSubmit() {
+                var app = this;
+                this.$refs.ruleForm
+                    .validate()
+                    .then(() => {
+                        app.spinning = true;
+                        axios.post('/word', this.form)
+                            .then(function (response) {
+                                app.spinning = false;
+                                notification.success({
+                                    message: '提示信息',
+                                    description: '123',
+                                })
+                                console.log(response);
+                            })
+                            .catch(function (error) {
+                                app.spinning = false;
+                                notification.success({
+                                    message: '提示信息',
+                                    description: '123',
+                                })
+                                console.log(error);
+                            });
+                    })
+                    .catch(error => {
+                        console.log('error', error);
+                    });
+
+            },
+            // 获取数据概况
+            getFiles: function () {
+                var app = this;
+                // // 请求api数据
+                // app.survey.loading = true;
+
+                axios.get('/files', {})
+                    .then(function (res) {
+                        console.log(res.data.data);
+                        app.data = res.data.data
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            onDownload: function (data) {
+                window.location.href = '/download/' + data.name
+            },
+            onDelete: function (row) {
+                var app = this;
+                axios.delete('/delete/' + row.name)
+                    .then(function (res) {
+                        const data = [...app.data];
+                        app.data = data.filter(item => item.name !== row.name);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            openNotificationWithIcon(type) {
+                notification[type]({
+                    message: '提示信息',
+                    description: '123',
+                });
+            },
+        },
+
+    }
+
+    Vue.createApp(AppInit)
+        .use(antd)
+        .use(antd.notification)
+        .mount('#app')
+</script>
+
+</html>
