@@ -33,6 +33,10 @@ func Create(r *ghttp.Request) {
 	pageRow := 46
 	wordPath := "./resource/"
 
+	if !gfile.Exists(wordPath) {
+		gfile.Mkdir(wordPath)
+	}
+
 	doc := document.New()
 
 	for _, item := range files {
