@@ -26,7 +26,7 @@
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
                     <a-button type="primary" @click="onSubmit">
-                        提交
+                        生成word
                     </a-button>
                 </a-form-item>
             </a-form>
@@ -121,17 +121,18 @@
                         axios.post('/word', this.form)
                             .then(function (response) {
                                 app.spinning = false;
-                                notification.success({
+                                app.getFiles();
+                                antd.notification.success({
                                     message: '提示信息',
-                                    description: '123',
+                                    description: '生成成功',
                                 })
                                 console.log(response);
                             })
                             .catch(function (error) {
                                 app.spinning = false;
-                                notification.success({
+                                antd.notification.error({
                                     message: '提示信息',
-                                    description: '123',
+                                    description: '生成失败',
                                 })
                                 console.log(error);
                             });
@@ -182,7 +183,6 @@
 
     Vue.createApp(AppInit)
         .use(antd)
-        .use(antd.notification)
         .mount('#app')
 </script>
 

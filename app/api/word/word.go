@@ -11,6 +11,8 @@ import (
 	"path/filepath"
 	"write_code_in_/app/ship/msg"
 
+	"github.com/gogf/gf/os/gfile"
+
 	"github.com/gogf/gf/container/garray"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
@@ -70,8 +72,10 @@ func GetFile(r *ghttp.Request) {
 
 	var data []interface{} = make([]interface{}, len(files))
 	for key, item := range files {
+		fileInfo := gfile.MTime(fullPath + "\\" + item)
 		var itemMap = make(map[string]string)
 		itemMap["name"] = item
+		itemMap["time"] = fileInfo.String()
 		data[key] = itemMap
 	}
 	msg.Success(r, data, "成功")
@@ -91,7 +95,7 @@ func Delete(r *ghttp.Request) {
 	err := os.Remove("./resource/" + name.(string))
 	responseData := interface{}(nil)
 	if err != nil {
-		msg.Fail(r,responseData, "失败")
+		msg.Fail(r, responseData, "失败")
 
 	} else {
 		msg.Success(r, responseData, "成功")
