@@ -8,44 +8,52 @@
     <title>软著word生成工具</title>
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ant-design-vue@2.0.0-rc.8/dist/antd.min.css">
-
+    <style>
+        body {
+            background-color: #F0F2F5;
+        }
+    </style>
 </head>
 
 <body>
     <div id="app">
 
         <a-spin :spinning="spinning">
-            <a-form ref="ruleForm" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-                <a-form-item ref="path" label="项目路径" name="path">
-                    <a-input v-model:value="form.path" />
-                </a-form-item>
-                <a-form-item ref="name" label="项目名称" name="name">
-                    <a-input v-model:value="form.name" />
-                </a-form-item>
-                <a-form-item ref="page" label="word页数" name="page">
-                    <a-input v-model:value="form.page" />
-                </a-form-item>
-                <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-                    <a-button type="primary" @click="onSubmit">
-                        生成word
-                    </a-button>
-                </a-form-item>
-            </a-form>
+            <a-card :body-style="{margin: '24px 32px'}" title="生成" :bordered="false">
+                <a-form ref="ruleForm" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+                    <a-form-item ref="path" label="项目路径" name="path">
+                        <a-input v-model:value="form.path" />
+                    </a-form-item>
+                    <a-form-item ref="name" label="项目名称" name="name">
+                        <a-input v-model:value="form.name" />
+                    </a-form-item>
+                    <a-form-item ref="page" label="word页数" name="page">
+                        <a-input v-model:value="form.page" />
+                    </a-form-item>
+                    <a-form-item :wrapper-col="{ span: 10, offset: 7 }">
+                        <a-button type="primary" @click="onSubmit">
+                            生成word
+                        </a-button>
+                    </a-form-item>
+                </a-form>
+            </a-card>
         </a-spin>
 
-        <a-table :columns="columns" :pagination="false" :data-source="data" :row-key="(record,index)=>{return index}">
-            <template #operation="{ text, record, index }">
-                <a-button type="primary" @click="onDownload(record)">
-                    下载
-                </a-button>
-                <a-popconfirm title="确认删除？" ok-text="确认" cancel-text="取消" @confirm="onDelete(record)">
-                    <a-button type="danger">
-                        删除
+        <a-card :body-style="{margin: '24px 32px'}" title="列表" :bordered="false">
+            <a-table :columns="columns" :pagination="false" :data-source="data"
+                :row-key="(record,index)=>{return index}">
+                <template #operation="{ text, record, index }">
+                    <a-button type="primary" @click="onDownload(record)">
+                        下载
                     </a-button>
-                </a-popconfirm>
-            </template>
-        </a-table>
-
+                    <a-popconfirm title="确认删除？" ok-text="确认" cancel-text="取消" @confirm="onDelete(record)">
+                        <a-button type="danger">
+                            删除
+                        </a-button>
+                    </a-popconfirm>
+                </template>
+            </a-table>
+        </a-card>
     </div>
 
 </body>
@@ -78,10 +86,10 @@
                 data: [],
                 columns,
                 labelCol: {
-                    span: 4
+                    span: 7
                 },
                 wrapperCol: {
-                    span: 14
+                    span: 10
                 },
                 form: {
                     name: '课堂',
