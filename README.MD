@@ -6,8 +6,8 @@
 gf run main.go
 ```
 
-2.在浏览器中打开 http://ip:8199【http://127.0.0.1:8199】
+2.在浏览器中打开 <http://ip:8199>【<http://127.0.0.1:8199>】
 
 ## 使用 GoFrame Project
 
-https://goframe.org
+<https://goframe.org>
