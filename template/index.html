@@ -28,7 +28,7 @@
                         <a-input v-model:value="form.name" />
                     </a-form-item>
                     <a-form-item ref="page" label="word页数" name="page">
-                        <a-input v-model:value="form.page" />
+                        <a-input-number v-model:value="form.page" :min="1" />
                     </a-form-item>
                     <a-form-item :wrapper-col="{ span: 10, offset: 7 }">
                         <a-button type="primary" @click="onSubmit">
@@ -123,7 +123,7 @@
         methods: {
             onSubmit() {
                 var app = this;
-                this.$refs.ruleForm
+                app.$refs.ruleForm
                     .validate()
                     .then(() => {
                         app.spinning = true;
