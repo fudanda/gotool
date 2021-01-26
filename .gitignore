@@ -19,3 +19,4 @@ main
 go.sum
 resource/
 main.exe
+packed/packed.go
