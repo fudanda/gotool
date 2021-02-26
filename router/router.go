@@ -2,6 +2,7 @@ package router
 
 import (
 	"write_code_in_/app/api/hello"
+	"write_code_in_/app/api/video"
 	"write_code_in_/app/api/word"
 
 	"github.com/gogf/gf/frame/g"
@@ -16,5 +17,7 @@ func init() {
 		group.ALL("/files", word.GetFile)
 		group.ALL("/download/:name", word.Download)
 		group.ALL("/delete/:name", word.Delete)
+		group.ALL("/video", video.List)
+
 	})
 }

@@ -18,9 +18,17 @@ Delimiters = ["${", "}"]
 Path = "template"
 
 # Database.
+# [database]
+# debug = true
+# link = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
+# # Database logger.
+# [database.logger]
+# Level = "all"
+# Path = "/tmp/log/gf-app/sql"
+# Stdout = true
 [database]
 debug = true
-link = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
+link = "sqlite:./database/cool.db"
 # Database logger.
 [database.logger]
 Level = "all"
